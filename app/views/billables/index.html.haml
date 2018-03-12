@@ -1,0 +1,17 @@
+%div.marked_entries
+  %p#amount_marked_entries
+    =t("billables.select_marked")
+  %button{id: "submit-billable-entries", disabled: true}
+    =t("billables.buttons.bill_selected")
+.billables
+  .outer
+    %h1= t("billables.billable_entries")
+    = form_tag("/billables", method: "post", remote: true, id: "billable-entries-form", autocomplete: "off") do
+      - @projects.each do |project|
+        .container
+          %h1= project.name
+          - if project.hours.exists?(billed: false)
+            = render "hours_entries", project: project
+          - if project.mileages.exists?(billed: false)
+            = render "mileages_entries", project: project
+      %button#submit-billable-entries-test= t("billables.buttons.bill_selected")
